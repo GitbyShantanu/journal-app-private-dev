@@ -5,9 +5,12 @@ import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.UserRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Slf4j
@@ -17,12 +20,20 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public void saveEntry(User user) {
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    public void saveNewUser(User user) {
         try {
             userRepository.save(user);
         } catch (Exception e) {
             log.error("Exception : ",e);
         }
+    }
+
+    public void saveEntry(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Arrays.asList("USER"));
+        userRepository.save(user);
     }
 
     public ArrayList<User> getAllEntries() {
