@@ -30,7 +30,7 @@ public class JournalService {
             // here we take reference of journalentry in savedEntry variable and insert in users List to sync.
             JournalEntry savedEntry = journalEntryRepository.save(newEntry);
             user.getJournalEntryList().add(savedEntry);
-            userService.saveEntry(user);
+            userService.saveUser(user);
         } catch (Exception e) {
             throw new RuntimeException("An error occured while saving the entry : "+e);
         }
@@ -51,11 +51,20 @@ public class JournalService {
     }
 
     @Transactional
-    public void deleteById(ObjectId id, String userName) {
-        User user = userService.findByUserName(userName);
-        user.getJournalEntryList().removeIf(x -> x.getId().equals(id));
-        userService.saveEntry(user);
-        journalEntryRepository.deleteById(id);
+    public boolean deleteById(ObjectId id, String userName) {
+        boolean removed = false;
+        try {
+            User user = userService.findByUserName(userName);
+            removed = user.getJournalEntryList().removeIf(x -> x.getId().equals(id));
+            if(removed) {
+                userService.saveUser(user);
+                journalEntryRepository.deleteById(id);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new RuntimeException("Exception occured while deleting the entry" + e);
+        }
+        return removed;
     }
 }
 

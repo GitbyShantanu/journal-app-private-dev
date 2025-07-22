@@ -14,7 +14,7 @@ public class PublicController {
 
     @PostMapping("/create-user")
     public boolean createUser(@RequestBody User newUser) {
-        userService.saveEntry(newUser);
+        userService.saveNewUser(newUser);
         return true;
     }
 }

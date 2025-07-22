@@ -20,9 +20,10 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public void saveNewUser(User user) {
+    // used for save most of times
+    public void saveUser(User user) {
         try {
             userRepository.save(user);
         } catch (Exception e) {
@@ -30,7 +31,8 @@ public class UserService {
         }
     }
 
-    public void saveEntry(User user) {
+    // used only when new user is saved with credentials
+    public void saveNewUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Arrays.asList("USER"));
         userRepository.save(user);
