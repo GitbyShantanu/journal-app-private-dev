@@ -19,6 +19,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    // step 1 for SpringSecurity : make a SpringSecurity class in config package and configure http request endpoints
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -26,11 +27,16 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                 .httpBasic();
+
+        // Do not create sessions; each request is independent (stateless REST API)
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .csrf().disable();
-
     }
+
+    // step 3: Configure Authentication Manager -> how Spring Security should load users and check passwords
+    // 1. User details (username, roles, password) load karne ke liye apna custom userDetailsService ka implementation use karna hai.
+    // 2. Password ko verify karte time passwordEncoder() ka logic lagana hai (e.g. BCrypt) for storing passwords in encoded format in mongodb.
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

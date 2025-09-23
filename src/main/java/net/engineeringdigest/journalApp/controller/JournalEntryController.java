@@ -23,6 +23,7 @@ public class JournalEntryController {
 
     @Autowired
     private JournalService journalService;
+
     @Autowired
     private UserService userService;
 

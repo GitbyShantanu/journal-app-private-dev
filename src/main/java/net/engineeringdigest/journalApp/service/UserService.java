@@ -22,7 +22,7 @@ public class UserService {
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    // used for save most of times
+    // used for save most of the time
     public void saveUser(User user) {
         try {
             userRepository.save(user);

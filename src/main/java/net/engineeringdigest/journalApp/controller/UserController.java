@@ -22,8 +22,10 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<User> getUserbyId() {
+        // SecurityContextHolder Stores currently authenticated user's details for this request.
+        // we fetch userDetails like username from authentication instead of endpoints.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
+        String userName = authentication.getName(); // Fetch user from DB using username
         User user = userService.findByUserName(userName);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
@@ -36,7 +38,7 @@ public class UserController {
         User userInDb = userService.findByUserName(userName);
         userInDb.setUserName(updatedUser.getUserName());
         userInDb.setPassword(updatedUser.getPassword());
-        userService.saveNewUser(userInDb);
+        userService.saveNewUser(userInDb); //this method is used bcz we need to encode password again and save.
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

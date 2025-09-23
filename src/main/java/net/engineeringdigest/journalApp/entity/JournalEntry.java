@@ -1,5 +1,6 @@
 package net.engineeringdigest.journalApp.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Document(collection = "journal_entries")
 @Data
+@AllArgsConstructor
 @NoArgsConstructor //bcz lombok only contains ArgsConstructor, sometimes we need noArgs constructor, otherwise gives error
 public class JournalEntry {
     @Id
@@ -19,5 +21,6 @@ public class JournalEntry {
     private String title;
 
     private String content;
+
     private LocalDateTime date;
 }
