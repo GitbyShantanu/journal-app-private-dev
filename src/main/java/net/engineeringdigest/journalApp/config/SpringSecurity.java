@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsService; // D.I. from step 2, needed to configure Authentication manager
 
     // step 1 for SpringSecurity : make a SpringSecurity class in config package and configure http request endpoints
     @Override
@@ -36,7 +36,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
     // step 3: Configure Authentication Manager -> how Spring Security should load users and check passwords
     // 1. User details (username, roles, password) load karne ke liye apna custom userDetailsService ka implementation use karna hai.
-    // 2. Password ko verify karte time passwordEncoder() ka logic lagana hai (e.g. BCrypt) for storing passwords in encoded format in mongodb.
+    // 2. Request auth header se mila rawPassword ko base64 me encode karne aur internally db ke hashed password se verify karne ke liye passwordEncoder() implement karke bean dena hai spring ko e.g. (BCrypt) for storing passwords in encoded format in mongodb and compare to verify.
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
