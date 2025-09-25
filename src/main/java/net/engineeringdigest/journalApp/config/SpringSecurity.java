@@ -29,7 +29,8 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .httpBasic();
 
         // Do not create sessions; each request is independent (stateless REST API)
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .csrf().disable();
     }

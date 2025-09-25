@@ -86,7 +86,10 @@ public class JournalEntryController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.findByUserName(userName);
-        List<JournalEntry> collect = user.getJournalEntryList().stream().filter(x -> x.getId().equals(myId)).collect(Collectors.toList());
+        List<JournalEntry> collect = user.getJournalEntryList()
+                .stream()
+                .filter(x -> x.getId().equals(myId))
+                .collect(Collectors.toList());
         if (!collect.isEmpty()) {
             Optional<JournalEntry> journalEntry = journalService.findById(myId);
             if (journalEntry.isPresent()) {
