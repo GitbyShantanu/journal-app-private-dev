@@ -8,10 +8,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-// step 2 required for authentication
-// 1. User entity, ✅
-// 2. UserRepository to interact with mongodb, ✅
-// 3. UserDetailsService implementation is needed to fetch user details for authentication, ✅
+// step 2 required for authentication manager
+// 1. User entity ✅
+// 2. UserRepository to interact with mongodb ✅
+// 3. UserDetailsService implementation to fetch user details for authentication ✅
 // 4. A configuration SecurityConfig to integrate everything with spring security (AuthenticationManager setup) ✅
 
 @Component

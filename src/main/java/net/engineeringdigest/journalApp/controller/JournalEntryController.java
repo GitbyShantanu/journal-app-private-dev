@@ -27,15 +27,6 @@ public class JournalEntryController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllJournalEntries() {
-        ArrayList<JournalEntry> allEntries = journalService.getAllEntries();
-        if (allEntries != null && !allEntries.isEmpty()) {
-            return new ResponseEntity<>(allEntries, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(allEntries, HttpStatus.NO_CONTENT);
-    }
-
     @GetMapping()
     public ResponseEntity<?> getAllJournalEntriesByUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -105,4 +96,15 @@ public class JournalEntryController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+//    @GetMapping("/all")
+//    public ResponseEntity<?> getAllJournalEntries() {
+//        ArrayList<JournalEntry> allEntries = journalService.getAllEntries();
+//        if (allEntries != null && !allEntries.isEmpty()) {
+//            return new ResponseEntity<>(allEntries, HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(allEntries, HttpStatus.NO_CONTENT);
+//    }
+
+
 }
