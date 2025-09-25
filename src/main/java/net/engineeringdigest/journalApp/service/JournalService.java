@@ -19,6 +19,7 @@ public class JournalService {
 
     @Autowired // Dependency Injection
     private JournalEntryRepository journalEntryRepository;
+
     @Autowired
     private UserService userService;
 
@@ -32,7 +33,7 @@ public class JournalService {
             user.getJournalEntryList().add(savedEntry);
             userService.saveUser(user);
         } catch (Exception e) {
-            throw new RuntimeException("An error occured while saving the entry : "+e);
+            throw new RuntimeException("An error occurred while saving the entry : "+e);
         }
     }
 
