@@ -4,8 +4,12 @@ import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.UserRepository;
 import net.engineeringdigest.journalApp.service.UserDetailsServiceImpl;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,18 +19,23 @@ import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 
-@SpringBootTest // Loads full Application context for testing (Integration-style test)
 public class UserDetailsServiceImplTest {
 
-    @Autowired
-    UserDetailsServiceImpl userDetailsService; // Actual service under test, auto-wired from context
+    @Mock
+    private UserRepository userRepository; // Mock(fake) repository (no DB, no Spring context)
 
-    @MockBean
-    UserRepository userRepository; // Mocked bean inserted into Spring context (replaces real repository)
+    @InjectMocks
+    private UserDetailsServiceImpl userDetailsService; // Injects mock into service manually
+
+    @BeforeEach
+    void setUp() {
+        // Spring Context ke absence me objects create nahi hote → service/repo null
+        // Fix: BeforeEach me init kiya
+        MockitoAnnotations.initMocks(this); // Ye line @Mock aur @InjectMocks objects ko initialize karti hai
+    }
 
     @Test
     void loadUserByUsernameTest() {
-
         // Mocking repository behavior: whenever findByUserName() is called with any String,
         // return a dummy User entity built using Lombok's @Builder
         when(userRepository.findByUserName(ArgumentMatchers.anyString()))
@@ -41,6 +50,7 @@ public class UserDetailsServiceImplTest {
 
         // Assertion to verify that the service successfully returned a UserDetails object
         Assertions.assertNotNull(user);
+        Assertions.assertEquals("ram", user.getUsername());
     }
 
 }
