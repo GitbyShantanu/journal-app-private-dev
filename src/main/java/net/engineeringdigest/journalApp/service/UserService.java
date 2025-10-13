@@ -35,11 +35,11 @@ public class UserService {
             userRepository.save(user);
             return true;
         } catch (Exception e) {
-//            log.error("Error occured for {}: ", user.getUserName(), e);
+            log.error("Error occured for {}: ", user.getUserName(), e);
             log.info("hahahah");
             log.debug("hahahah");
-//            log.trace("hahahah");
-//            log.warn("hahahah");
+            log.trace("hahahah");
+            log.warn("hahahah");
             return false;
         }
     }
