@@ -38,8 +38,8 @@ public class UserController {
         User userInDb = userService.findByUserName(userName);
         userInDb.setUserName(updatedUser.getUserName());
         userInDb.setPassword(updatedUser.getPassword());
-        userService.saveNewUser(userInDb); //this method is used bcz we need to encode password again and save.
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        boolean b = userService.saveNewUser(userInDb);//this method is used bcz we need to encode password again and save.
+        return new ResponseEntity<>(b,HttpStatus.NO_CONTENT);
     }
 
     @Transactional

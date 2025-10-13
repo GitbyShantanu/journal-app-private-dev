@@ -32,7 +32,7 @@ class UserServiceTest {
         when(userRepository.save(any(User.class))).thenReturn(user);
 
         // Act: service method call
-        userService.saveNewUser(user);
+        boolean saved = userService.saveNewUser(user);
 
         // Assert: verify username, encoded password, and roles
         assertEquals("Pakya", user.getUserName());           // username correct set hua?
