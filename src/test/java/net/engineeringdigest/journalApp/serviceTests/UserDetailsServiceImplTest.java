@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 
-public class UserDetailsServiceImplTest {
+class UserDetailsServiceImplTest {
 
     @Mock
     private UserRepository userRepository; // Mock(fake) repository (no DB, no Spring context)

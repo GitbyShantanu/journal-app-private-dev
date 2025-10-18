@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
@@ -32,7 +33,7 @@ class UserServiceTest {
         when(userRepository.save(any(User.class))).thenReturn(user);
 
         // Act: service method call
-        boolean saved = userService.saveNewUser(user);
+        userService.saveNewUser(user);
 
         // Assert: verify username, encoded password, and roles
         assertEquals("Pakya", user.getUserName());           // username correct set hua?

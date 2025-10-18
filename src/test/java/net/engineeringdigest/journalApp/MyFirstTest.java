@@ -1,16 +1,13 @@
 package net.engineeringdigest.journalApp;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MyFirstTest {
+class MyFirstTest {
     @Test
-    public void myFirstTestMethod() {
+    void myFirstTestMethod() {
         // Arrange
         int a = 5, b = 3;
         // Act
@@ -20,29 +17,29 @@ public class MyFirstTest {
     }
 
     @BeforeAll
-    public static void setup() {
+    static void setup() {
         System.out.println("JUnit Testing started....");
     }
 
     @BeforeEach
-    public void setup2() {
+    void setup2() {
         System.out.println("Setting up before each test...");
     }
 
     @Test
-    public void arithmetic() {
+    void arithmetic() {
         assertEquals(10, 5+5);
     }
 
     @Test
     @CsvSource("shan")
-    public void stringNotNullTest() {
+    void stringNotNullTest() {
         String str = "shan";
         assertNotNull(str);
     }
 
     @AfterEach
-    public void teardown() {
+    void teardown() {
         System.out.println("Cleaning up after each test");
     }
 
