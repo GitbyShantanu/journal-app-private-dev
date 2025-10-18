@@ -1,6 +1,6 @@
 package net.engineeringdigest.journalApp.controller;
 
-import net.engineeringdigest.journalApp.dto.journalEntryDTO;
+import net.engineeringdigest.journalApp.dto.JournalEntryDTO;
 import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.service.JournalService;
@@ -58,7 +58,7 @@ public class JournalEntryController {
     }
 
     @PostMapping()
-    public ResponseEntity<JournalEntry> createEntry(@RequestBody journalEntryDTO newEntryDto) {
+    public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntryDTO newEntryDto) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String userName = authentication.getName();
@@ -83,7 +83,7 @@ public class JournalEntryController {
 
     @PutMapping("id/{myId}")
     public ResponseEntity<JournalEntry> updateJournalByID(@PathVariable ObjectId myId,
-                                                          @RequestBody journalEntryDTO updatedEntryDto) {
+                                                          @RequestBody JournalEntryDTO updatedEntryDto) {
         // Get authenticated username
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByUserName(userName);

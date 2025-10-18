@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class journalEntryDTO {
+public class JournalEntryDTO {
     private String title;
     private String content;
 }
