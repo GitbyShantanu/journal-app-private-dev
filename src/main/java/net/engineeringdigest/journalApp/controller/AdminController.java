@@ -1,5 +1,6 @@
 package net.engineeringdigest.journalApp.controller;
 
+import net.engineeringdigest.journalApp.dto.UserDTO;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class AdminController {
     }
 
     @PostMapping("/create-admin-user")
-    public ResponseEntity<?> createNewAdminUser(@RequestBody User newUser) {
-        userService.saveAdmin(newUser);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    public ResponseEntity<UserDTO> createNewAdminUser(@RequestBody UserDTO newUserDTO) {
+        userService.saveAdmin(newUserDTO);
+        return new ResponseEntity<>(newUserDTO, HttpStatus.CREATED);
     }
 }

@@ -1,6 +1,6 @@
 package net.engineeringdigest.journalApp.controller;
 
-import net.engineeringdigest.journalApp.entity.User;
+import net.engineeringdigest.journalApp.dto.UserDTO;
 import net.engineeringdigest.journalApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +15,11 @@ public class PublicController {
     private UserService userService;
 
     @PostMapping("/create-user")
-    public ResponseEntity<?> createUser(@RequestBody User newUser) {
-        boolean flag = userService.saveNewUser(newUser);
+    public ResponseEntity<Boolean> createUser(@RequestBody UserDTO newUserDTO) {
+        boolean flag = userService.saveNewUser(newUserDTO);
+        if(flag) {
+            return new ResponseEntity<>(flag,HttpStatus.OK);
+        }
         return new ResponseEntity<>(flag,HttpStatus.BAD_REQUEST);
     }
 }

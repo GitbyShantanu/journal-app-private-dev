@@ -1,5 +1,6 @@
 package net.engineeringdigest.journalApp.controller;
 
+import net.engineeringdigest.journalApp.dto.UserDTO;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.UserRepository;
 import net.engineeringdigest.journalApp.service.UserService;
@@ -32,12 +33,12 @@ public class UserController {
 
     @Transactional
     @PutMapping()
-    public ResponseEntity<?> updateUser(@RequestBody User updatedUser) {
+    public ResponseEntity<Boolean> updateUser(@RequestBody UserDTO updatedUserDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User userInDb = userService.findByUserName(userName);
-        userInDb.setUserName(updatedUser.getUserName());
-        userInDb.setPassword(updatedUser.getPassword());
+        userInDb.setUserName(updatedUserDTO.getUserName());
+        userInDb.setPassword(updatedUserDTO.getPassword());
         boolean b = userService.saveNewUser(userInDb);//this method is used bcz we need to encode password again and save.
         return new ResponseEntity<>(b,HttpStatus.NO_CONTENT);
     }

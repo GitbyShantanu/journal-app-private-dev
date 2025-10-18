@@ -1,6 +1,7 @@
 package net.engineeringdigest.journalApp.service;
 
 import lombok.extern.slf4j.Slf4j;
+import net.engineeringdigest.journalApp.dto.journalEntryDTO;
 import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.JournalEntryRepository;
@@ -24,14 +25,23 @@ public class JournalService {
     private UserService userService;
 
     @Transactional // to make it commit or rollback(if any problem occcurs)
-    public void saveEntry(JournalEntry newEntry, String userName) {
+    public JournalEntry saveEntry(journalEntryDTO newEntryDto, String userName) {
         try {
             User user = userService.findByUserName(userName);
-            newEntry.setDate(LocalDateTime.now());
-            // here we take reference of journalentry in savedEntry variable and insert in users List to sync.
+            if(user == null) throw new RuntimeException("User not found");
+
+            JournalEntry newEntry = JournalEntry.builder()
+                            .title(newEntryDto.getTitle())
+                            .content(newEntryDto.getContent())
+                            .date(LocalDateTime.now())
+                            .build();
+
             JournalEntry savedEntry = journalEntryRepository.save(newEntry);
+
+            // here we take reference of journalentry savedEntry variable and insert in user's List to sync.
             user.getJournalEntryList().add(savedEntry);
             userService.saveUser(user);
+            return savedEntry;
         } catch (Exception e) {
             throw new RuntimeException("An error occurred while saving the entry : "+e);
         }
