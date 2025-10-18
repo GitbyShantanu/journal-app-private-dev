@@ -1,7 +1,7 @@
 package net.engineeringdigest.journalApp.service;
 
 import lombok.extern.slf4j.Slf4j;
-import net.engineeringdigest.journalApp.dto.journalEntryDTO;
+import net.engineeringdigest.journalApp.dto.JournalEntryDTO;
 import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.JournalEntryRepository;
@@ -25,7 +25,7 @@ public class JournalService {
     private UserService userService;
 
     @Transactional // to make it commit or rollback(if any problem occcurs)
-    public JournalEntry saveEntry(journalEntryDTO newEntryDto, String userName) {
+    public JournalEntry saveEntry(JournalEntryDTO newEntryDto, String userName) {
         try {
             User user = userService.findByUserName(userName);
             if(user == null) throw new RuntimeException("User not found");

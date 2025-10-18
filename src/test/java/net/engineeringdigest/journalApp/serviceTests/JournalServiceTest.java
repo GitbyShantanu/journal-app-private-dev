@@ -1,5 +1,6 @@
 package net.engineeringdigest.journalApp.serviceTests;
 
+import net.engineeringdigest.journalApp.dto.JournalEntryDTO;
 import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.JournalEntryRepository;
@@ -29,30 +30,43 @@ class JournalServiceTest {
     @InjectMocks
     private JournalService journalService; // inject mocks into service
 
+
     @Test
-    void testSaveEntry_AddsToUserJournalList() {
+    void testSaveEntry2_AddsToUserJournalList() {
+        // Prepare user
         User user = new User();
         user.setUserName("Ram");
         user.setJournalEntryList(new ArrayList<>()); // empty list initially
-        JournalEntry entry = new JournalEntry();
 
-        // findByUserName call will return our mocked user
+        // Prepare JournalEntryDTO instead of JournalEntry entity
+        JournalEntryDTO entryDto = new JournalEntryDTO();
+        entryDto.setTitle("Test Title");
+        entryDto.setContent("Test Content");
+
+        // Mock userService.findByUserName
         when(userService.findByUserName("Ram")).thenReturn(user);
-        // save will just return the same journal entry
-        when(journalEntryRepository.save(entry)).thenReturn(entry);
-        // saveUser does nothing (mocked)
+
+        // Mock repository save to return a JournalEntry entity (service internally maps DTO -> entity)
+        JournalEntry savedEntry = new JournalEntry();
+        savedEntry.setTitle(entryDto.getTitle());
+        savedEntry.setContent(entryDto.getContent());
+        when(journalEntryRepository.save(any(JournalEntry.class))).thenReturn(savedEntry);
+
+        // Mock saveUser (does nothing)
         doNothing().when(userService).saveUser(user);
 
-        // call actual method
-        journalService.saveEntry(entry, "Ram");
+        // Call actual service method
+        journalService.saveEntry(entryDto, "Ram");
 
-        // Assertions: entry added to user's journal list
-        assertTrue(user.getJournalEntryList().contains(entry));
-        // verify repository save called exactly once
-        verify(journalEntryRepository, times(1)).save(entry);
-        // verify userService saveUser called exactly once
+        // Assertions: savedEntry added to user's journal list
+        assertTrue(user.getJournalEntryList().contains(savedEntry));
+
+        // Verify repository save called exactly once
+        verify(journalEntryRepository, times(1)).save(any(JournalEntry.class));
+        // Verify userService saveUser called exactly once
         verify(userService, times(1)).saveUser(user);
     }
+
 
     @Test
     void testGetAllEntries() {
