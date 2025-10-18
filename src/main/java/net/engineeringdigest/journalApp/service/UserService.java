@@ -21,7 +21,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     //private static final Logger logger = LoggerFactory.getLogger(UserService.class); // used for understanding logging but we can use @Slf4j annotation internally includes instance of logger.
 

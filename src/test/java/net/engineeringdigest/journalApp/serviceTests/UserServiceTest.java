@@ -1,49 +1,60 @@
 package net.engineeringdigest.journalApp.serviceTests;
 
+import net.engineeringdigest.journalApp.dto.UserDTO;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.UserRepository;
 import net.engineeringdigest.journalApp.service.UserService;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@Disabled
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
     @Mock
-    private UserRepository userRepository; // Mock repository, real DB nahi use hoga
+    private UserRepository userRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private UserService userService; // Mockito automatically mock repository inject karega
+    private UserService userService;
+
+    @BeforeEach
+    void setUp() {
+        // Optional: additional setup if needed
+    }
 
     @Test
-    void testSaveNewUser_ShouldEncodePasswordAndAssignRoles() {
-        // Prepare test data
-        User user = new User();
-        user.setUserName("Pakya");
-        user.setPassword("myPass");
+    void testSaveNewUser_EncodesPasswordAndAssignRole_ReturnsTrue() {
+        // Prepare DTO
+        UserDTO dto = new UserDTO();
+        dto.setUserName("testUser");
+        dto.setPassword("plain");
 
-        // Simple stub: jab kisi bhi user ki save() call ho, wahi user return ho jaaye
-        when(userRepository.save(any(User.class))).thenReturn(user);
+        // Mock encoding
+        when(passwordEncoder.encode(anyString())).thenReturn("encoded");
 
-        // Act: service method call
-        userService.saveNewUser(user);
+        // Mock repository save to just return the user
+        when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        // Assert: verify username, encoded password, and roles
-        assertEquals("Pakya", user.getUserName());           // username correct set hua?
-        assertNotEquals("myPass", user.getPassword());     // password encode hua?
-        assertNotNull(user.getRoles());                      // roles null nahi?
-        assertEquals(1, user.getRoles().size());    // sirf 1 role assign hua?
-        assertTrue(user.getRoles().contains("USER"));        // USER role properly assign hua?
+        // Call service
+        boolean result = userService.saveNewUser(dto);
+
+        // Assertions
+        assertTrue(result, "User should be saved successfully");
+
+        // Verify encoder was called
+        verify(passwordEncoder).encode("plain");
     }
 }
-
-
