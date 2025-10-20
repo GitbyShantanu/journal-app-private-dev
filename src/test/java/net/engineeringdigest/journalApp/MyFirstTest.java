@@ -5,7 +5,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
 class MyFirstTest {
     @Test
     void myFirstTestMethod() {
