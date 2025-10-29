@@ -12,4 +12,7 @@ class JournalAppTests {
 	void contextLoads() {
 	}
 
+//	API Access key
+//	67eb970b906666b611cea13da2778c76
+
 }
