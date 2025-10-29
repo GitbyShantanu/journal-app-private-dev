@@ -34,6 +34,8 @@ public class UserService {
                     .userName(userDto.getUserName())
                     .password(passwordEncoder.encode(userDto.getPassword())) // encode before saving
                     .roles(Arrays.asList("USER")) // default role
+                    .email(userDto.getEmail())
+                    .sentimentAnalysis(userDto.isSentimentAnalysis())
                     .build();
             userRepository.save(user);
             return true;
@@ -66,6 +68,8 @@ public class UserService {
                 .userName(userDto.getUserName())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .roles(Arrays.asList("USER", "ADMIN"))
+                .email(userDto.getEmail())
+                .sentimentAnalysis(userDto.isSentimentAnalysis())
                 .build();
         userRepository.save(user);
     }

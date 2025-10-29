@@ -112,6 +112,10 @@ public class JournalEntryController {
             oldEntry.setContent(updatedEntryDto.getContent());
         }
 
+        if (updatedEntryDto.getSentiment() != null) {
+            oldEntry.setSentiment(updatedEntryDto.getSentiment());
+        }
+
         // Save updated journal entry
         journalService.saveEntry(oldEntry);
         return new ResponseEntity<>(oldEntry, HttpStatus.OK);

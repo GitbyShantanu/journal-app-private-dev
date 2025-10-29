@@ -1,5 +1,6 @@
 package net.engineeringdigest.journalApp.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import net.engineeringdigest.journalApp.api.response.WeatherResponse;
 import net.engineeringdigest.journalApp.dto.UserDTO;
 import net.engineeringdigest.journalApp.entity.User;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -30,7 +32,7 @@ public class UserController {
     private WeatherService weatherService;
 
     @GetMapping()
-    public ResponseEntity<User> getUserbyId() {
+    public ResponseEntity<User> getUserbyUserName() {
         // SecurityContextHolder Stores currently authenticated user's details for this request.
         // we fetch userDetails like username from authentication instead of endpoints.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -45,10 +47,34 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User userInDb = userService.findByUserName(userName);
-        userInDb.setUserName(updatedUserDTO.getUserName());
-        userInDb.setPassword(updatedUserDTO.getPassword());
-        boolean b = userService.saveNewUser(userInDb);//this method is used bcz we need to encode password again and save.
-        return new ResponseEntity<>(b,HttpStatus.NO_CONTENT);
+
+        try{
+            // Update only non-empty fields from DTO
+            if (updatedUserDTO.getUserName() != null && !updatedUserDTO.getUserName().trim().isEmpty()) {
+                userInDb.setUserName(updatedUserDTO.getUserName().trim()); // update username
+            }
+
+            if (updatedUserDTO.getEmail() != null && !updatedUserDTO.getEmail().trim().isEmpty()) {
+                userInDb.setEmail(updatedUserDTO.getEmail().trim()); // update email
+            }
+
+            // Update only if sentiment flag changed
+            if (updatedUserDTO.isSentimentAnalysis() != userInDb.isSentimentAnalysis()) {
+                userInDb.setSentimentAnalysis(updatedUserDTO.isSentimentAnalysis());
+            }
+
+            if (updatedUserDTO.getPassword() != null && !updatedUserDTO.getPassword().trim().isEmpty()) {
+                userInDb.setPassword(updatedUserDTO.getPassword().trim()); // update password
+                userService.saveNewUser(userInDb); // call service that encrypts + saves
+            } else {
+                userService.saveUser(userInDb); // normal save (no bcrypt)
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("Error during update : "+e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Transactional

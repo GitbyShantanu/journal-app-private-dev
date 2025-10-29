@@ -34,8 +34,8 @@ public class JournalService {
                             .title(newEntryDto.getTitle())
                             .content(newEntryDto.getContent())
                             .date(LocalDateTime.now())
+                            .sentiment(newEntryDto.getSentiment())
                             .build();
-
             JournalEntry savedEntry = journalEntryRepository.save(newEntry);
 
             // here we take reference of journalentry savedEntry variable and insert in user's List to sync.

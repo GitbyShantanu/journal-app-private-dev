@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.engineeringdigest.journalApp.enums.Sentiment;
 
 
 @Builder
@@ -13,4 +14,5 @@ import lombok.NoArgsConstructor;
 public class JournalEntryDTO {
     private String title;
     private String content;
+    private Sentiment sentiment;
 }
