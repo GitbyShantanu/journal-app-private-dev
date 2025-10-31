@@ -43,21 +43,16 @@ public class RedisService {
      * Java object ko Redis mein save with TTL
      * @param key - Redis key
      * @param value - Any Java object
-     * @param ttl - Time to live in seconds
+     * @param ttl - Time to live(auto delete) in seconds
      */
     public void set(String key, Object value, Long ttl) {
         try {
-//            System.out.println("Redis Key: " + key);
-//            System.out.println("Redis Value: " + value);
-
             ObjectMapper objectMapper = new ObjectMapper();
-            String jsonBody  = objectMapper.writeValueAsString(value); // ⬅️ Ye add karo
-            stringRedisTemplate.opsForValue().set(key, jsonBody , ttl, TimeUnit.SECONDS);
-
-//            System.out.println("Redis Success!");
-
+            String jsonBody = objectMapper.writeValueAsString(value);
+            stringRedisTemplate.opsForValue().set(key, jsonBody, ttl, TimeUnit.SECONDS);
         } catch (Exception e) {
-            log.error("Exception : ", e);
+            log.error("Failed to save key '{}' in Redis | Reason: {}", key, e.getMessage());
         }
     }
+
 }

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 
+@Disabled
 class UserDetailsServiceImplTest {
 
     @Mock

@@ -7,8 +7,6 @@ target/
 # MongoDB URI file - DO NOT TRACK!
 /src/main/resources/application.properties.bak
 
-*.yml
-
 ### STS ###
 .apt_generated
 .classpath
@@ -17,8 +15,9 @@ target/
 .settings
 .springBeans
 .sts4-cache
-*.yml
+*application-dev.yml
 *.log
+*.env
 
 ### IntelliJ IDEA ###
 .idea
