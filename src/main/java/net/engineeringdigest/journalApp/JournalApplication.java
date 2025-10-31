@@ -32,7 +32,7 @@ public class JournalApplication {
     }
 
     @Bean
-    public RestTemplate restTemplate() {
+    public RestTemplate restTemplate() { // External API calls ke liye Spring ka HTTP client
         return new RestTemplate();
     }
 

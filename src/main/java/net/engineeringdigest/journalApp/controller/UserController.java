@@ -86,18 +86,26 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/greetings")
-    public ResponseEntity<String> greetings() {
+    @GetMapping("/greetings/city/{myCity}")
+    public ResponseEntity<String> greetings(@PathVariable String myCity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
-        WeatherResponse weatherResponse = weatherService.getWeather("Mumbai");
+        WeatherResponse weatherResponse = weatherService.getWeather(myCity.toLowerCase());
         String greet = "";
-        if(weatherResponse != null) {
+        if(weatherResponse != null && weatherResponse.getCurrent() != null) {
             int temperature = weatherResponse.getCurrent().getTemperature();
             int feelslike = weatherResponse.getCurrent().getFeelslike();
             List<String> weatherDescriptions = weatherResponse.getCurrent().getWeatherDescriptions();
-            greet = ", weather in Mumbai feels like, " + "temperature=" +temperature+" degree celcius," + "feels like: "+feelslike+ " degree celcius,"+ " weather: "+weatherDescriptions;
+            greet = String.format(", Weather in %s: Temperature %d°C (feels like %d°C). Condition: %s",
+                    myCity.toUpperCase(),
+                    temperature,
+                    feelslike,
+                    String.join(", ", weatherDescriptions)
+            );
+        } else {
+            greet = ", weather data not available for " + myCity;
         }
-        return new ResponseEntity<>("Hi " + userName + greet, HttpStatus.OK);
+
+        return new ResponseEntity<>("Hi " + userName.toUpperCase() + greet, HttpStatus.OK);
     }
 }

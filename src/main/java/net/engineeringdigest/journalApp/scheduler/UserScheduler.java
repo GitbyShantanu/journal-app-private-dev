@@ -26,8 +26,9 @@ public class UserScheduler {
     private UserRepositoryImpl userRepository; // Db se SentimentAnalysis via Email opted users fetch karne ke liye custom repo
 
 
-//    @Scheduled(cron = "0 0 9 ? * SUN")
-    @Scheduled(cron = "0 * * * * *")
+//    @Scheduled(cron = "0 * * * * *") //every minute
+
+    @Scheduled(cron = "0 0 9 ? * SUN") // every sunday 9AM
     public void fetchUserAndSendSaMail() {
         List<User> usersForSA = userRepository.getUserForSA(); // DB se sentiment analysis enabled users ki list
 
