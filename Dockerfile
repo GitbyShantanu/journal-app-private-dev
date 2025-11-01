@@ -1,5 +1,5 @@
-# Use official Java runtime
-FROM eclipse-temurin:17-jdk-alpine
+# ---------- Stage 1: Build ----------
+FROM maven:3.9.9-eclipse-temurin-17 AS build
 
 # Set working directory
 WORKDIR /app
@@ -8,14 +8,22 @@ WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
-# Copy source code
+# Copy the rest of the source code and build the app
 COPY src ./src
-
-# Package the application
 RUN mvn clean package -DskipTests
 
-# Expose port
-EXPOSE 8080
+# ---------- Stage 2: Run ----------
+FROM eclipse-temurin:17-jdk-alpine
 
-# Run the jar
-CMD ["java", "-jar", "target/journalApp-0.0.1-SNAPSHOT.jar"]
+# Set working directory
+WORKDIR /app
+
+# Copy jar file from the build stage
+COPY --from=build /app/target/journalApp-0.0.1-SNAPSHOT.jar app.jar
+
+# Expose port (prod is 8081)
+ENV SERVER_PORT=8081
+EXPOSE 8081
+
+# Run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]
