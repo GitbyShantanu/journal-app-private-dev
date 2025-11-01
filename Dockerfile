@@ -15,7 +15,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Expose port
-EXPOSE 8081
+EXPOSE 8080
 
 # Run the jar
 CMD ["java", "-jar", "target/journalApp-0.0.1-SNAPSHOT.jar"]
